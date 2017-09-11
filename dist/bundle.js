@@ -65,133 +65,240 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__operations__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaceBuilder__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__resultToPage__ = __webpack_require__(3);
+var model = {
+    currentPerson: {},
+    allPersons: [
+        {
+            name: 'Lily Butler',
+            score: 2,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/men/1.jpg'
+        },
+        {
+            name: 'Waller Perry',
+            score: 4,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/women/1.jpg'
+        },
+        {
+            name: 'Tammi Donovan',
+            score: 5,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/men/2.jpg'
+        },
+        {
+            name: 'Doreen Flowers',
+            score: 4,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/men/3.jpg'
+        },
+        {
+            name: 'Price Pace',
+            score: 2,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/men/4.jpg'
+        },
+        {
+            name: 'Larson Maldonado',
+            score: 1,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/men/5.jpg'
+        },
+        {
+            name: 'Berg Bolton',
+            score: 5,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/women/2.jpg'
+        },
+        {
+            name: 'Mack Lott',
+            score: 3,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/men/6.jpg'
+        },
+        {
+            name: 'Rosanna Mcleod',
+            score: 4,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/men/7.jpg'
+        },
+        {
+            name: 'Rosalie Rice',
+            score: 1,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/men/8.jpg'
+        },
+        {
+            name: 'Virginia Buchanan',
+            score: 2,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/women/3.jpg'
+        },
+        {
+            name: 'Lorna Stein',
+            score: 4,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/men/9.jpg'
+        },
+        {
+            name: 'Rosalie Steele',
+            score: 3,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/women/4.jpg'
+        },
+        {
+            name: 'Wilcox Boyd',
+            score: 5,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/men/10.jpg'
+        },
+        {
+            name: 'Ollie Rice',
+            score: 5,
+            photoUrl: 'http://api.randomuser.me/portraits/thumb/men/11.jpg'
+        }
+    ]
+};
 
-
-
-
-
-Object(__WEBPACK_IMPORTED_MODULE_1__interfaceBuilder__["a" /* interfaceBuilder */])();
-document.body.addEventListener('click', (e)=>{
-    let a = document.getElementById('a').value;
-    let b = document.getElementById('b').value;
-    let result = 0;
-    switch (e.target.id) {
-        case 'buttonPlus':
-            result = __WEBPACK_IMPORTED_MODULE_0__operations__["a" /* default */].mathPlus(a,b);
-            break;
-        case 'buttonMinus':
-            result = __WEBPACK_IMPORTED_MODULE_0__operations__["a" /* default */].mathMinus(a,b);
-            break;
-        case 'buttonMultiply':
-            result = __WEBPACK_IMPORTED_MODULE_0__operations__["a" /* default */].mathMultiply(a,b);
-            break;
-        case 'buttonDivide':
-            result = __WEBPACK_IMPORTED_MODULE_0__operations__["a" /* default */].mathDivide(a,b);
-            break;
-        default:
+var control = {
+    init: function(){
+        sortView.init();
+        listView.init();
+        scoresView.init();
+    },
+    getAllNames: function(){
+        let names = [];
+        for (var i = 0; i < model.allPersons.length; i++) {
+            names.push(model.allPersons[i].name);
+        }
+        return names;
+    },
+    getAllScores: function(){
+        let scores = [];
+        for (var i = 0; i < model.allPersons.length; i++) {
+            scores.push(model.allPersons[i].score);
+        }
+        return scores;
+    },
+    setCurrentPerson: function(index){
+        model.currentPerson = model.allPersons[index];
+        $("#brief-info span:first-child").text(`${model.currentPerson.name}`);
+        $("#brief-info span:last-child").text(`${model.currentPerson.score}`);
+        control.viewCurrentProfile();
+    },
+    getCurrentPerson: function(){
+        return model.currentPerson;
+    },
+    viewCurrentProfile: function(){
+        profileView.render();
+    },
+    setCurrentPersonScore: function(value){
+        model.currentPerson.score = value;
+        console.log('i set new score');
+    },
+    moveUserUp: function (index) {
+        if (index>=1 && index<=model.allPersons.length){
+            let temp = model.allPersons[index-1];
+            model.allPersons[index-1] = model.allPersons[index];
+            model.allPersons[index] = temp;
+            $(".names").empty();
+            $(".scores").empty();
+            $(".profile").empty();
+            $("#brief-info").remove();
+            listView.render();
+            scoresView.render();
+        }
+    },
+    moveUserDown: function (index) {
+        console.log(model.allPersons,'pre');
+        if (index>=0 && index<=(model.allPersons.length-2)){
+            let temp = model.allPersons[+index+1];
+            model.allPersons[+index+1] = model.allPersons[+index];
+            model.allPersons[+index] = temp;
+            console.log(model.allPersons, "after");
+            $(".names").empty();
+            $(".scores").empty();
+            $(".profile").empty();
+            $("#brief-info").remove();
+            listView.render();
+            scoresView.render();
+        }
+        console.log(model.allPersons);
     }
-    Object(__WEBPACK_IMPORTED_MODULE_2__resultToPage__["a" /* resultToPage */])(result);
-});
+};
 
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+var listView = {
+    init: function(){
+        this.render();
+        $('.names').on('click',this.handleClicks);
+    },
+    render: function(){
+        for (var i = 0; i < control.getAllNames().length/*model.allPersons.length*/; i++) {
+            $(".names").append(`<li id=${i}>${control.getAllNames()[i]}</li>`);
+        }
+        $(".wrapper").after(`<div id="brief-info">Selected person is <span></span> Person's score is: <span></span></div>`);
 
-"use strict";
-function mathPlus(a,b) {
+    },
+    handleClicks: function(event){
+        console.log(event.target.id);
+        control.setCurrentPerson(event.target.id);
+    }
+};
 
-    return parseInt(a,10)+parseInt(b,10);
+
+var scoresView = {
+    init: function(){
+        this.render();
+        $('.scores').on('click',this.handleClicks);
+    },
+    render: function(){
+        for (var i = 0; i < control.getAllScores().length/*model.allPersons.length*/; i++) {
+            $(".scores").append(`<li id="id-${i}"><span>${control.getAllScores()[i]}</span><input class="score-input" type="text" hidden></li>`);
+        }
+    },
+    handleClicks: function(event) {
+        console.log(event.target.id);
+        let liId = event.target.id.split('').splice(3).join('');
+        let parentId = event.target.parentNode.id.split('').splice(3).join('');
+        console.log(liId);
+        if(typeof liId ==='string'){
+            $(`#id-${liId}`).children().toggle().focus();
+            $(`#id-${liId}`).focusout(function () {
+                console.log('focusout',$(`#id-${liId}`).children(".score-input").val());
+                $(`#id-${liId}`).children().text($(`#id-${liId}`).children(".score-input").val());
+                control.setCurrentPersonScore($(`#id-${liId}`).children(".score-input").val());
+            });
+            control.setCurrentPerson(liId);
+        }
+    }
+};
+
+
+var profileView = {
+    init: function(){
+        this.render();
+    },
+    render: function(){
+        $('.profile').html(`<img src=${control.getCurrentPerson().photoUrl}><h3>${control.getCurrentPerson().name}</h3><p>${control.getCurrentPerson().score}</p>`)
+    }
+};
+
+var sortView = {
+    init: function(){
+        this.render();
+        $(".up").on('click',this.handleClicks);
+        $(".down").on('click',this.handleClicks);
+    },
+    render: function () {
+        for (var i = 0; i < control.getAllNames().length; i++) {
+            $(".sorting").append(`<li class="sort-li" ><div class="up" id="su-${i}"></div><div class="down" id="sd-${i}"></div></li>`);
+        }
+    },
+    handleClicks: function(event){
+        console.log($(event.target).attr("class"));
+        if($(event.target).attr("class")==='up'){
+            let liId = event.target.id.split('').splice(3).join('');
+            control.moveUserUp(liId);
+            console.log(liId);
+            console.log(event.target.parentNode);
+        } else if($(event.target).attr("class")==='down'){
+            let liId = event.target.id.split('').splice(3).join('');
+            control.moveUserDown(liId);
+            console.log(liId);
+        }
+    }
 }
-function mathMinus(a,b) {
-    return parseInt(a,10)-parseInt(b,10);
-}
-function mathMultiply(a,b) {
-    return parseInt(a,10)*parseInt(b,10);
-}
-function mathDivide(a,b) {
-    return parseInt(a,10)/parseInt(b,10);
-}
 
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-    mathPlus: mathPlus,
-    mathMinus: mathMinus,
-    mathMultiply: mathMultiply,
-    mathDivide: mathDivide
-
-});
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = interfaceBuilder;
-function interfaceBuilder() {
-    let inputA = document.createElement('INPUT');
-    inputA.setAttribute('TYPE', 'number');
-    inputA.setAttribute('id','a');
-
-    document.body.appendChild(inputA);
-    let br = document.createElement('br');
-    document.body.appendChild(br);
-
-    let inputB = document.createElement('INPUT');
-    inputB.setAttribute('TYPE', 'number');
-    inputB.setAttribute('id','b');
-    document.body.appendChild(inputB);
-
-    let br1 = document.createElement('br');
-    document.body.appendChild(br1);
-    document.body.appendChild(br1);
-
-    let buttonPlus = document.createElement('INPUT');
-    buttonPlus.setAttribute('TYPE', 'button');
-    buttonPlus.setAttribute('value', '+');
-    buttonPlus.setAttribute('id','buttonPlus');
-    document.body.appendChild(buttonPlus);
-
-    let buttonMinus = document.createElement('INPUT');
-    buttonMinus.setAttribute('TYPE', 'button');
-    buttonMinus.setAttribute('value', '-');
-    buttonMinus.setAttribute('id','buttonMinus');
-    document.body.appendChild(buttonMinus);
-
-    let buttonMultiply = document.createElement('INPUT');
-    buttonMultiply.setAttribute('TYPE', 'button');
-    buttonMultiply.setAttribute('value', '*');
-    buttonMultiply.setAttribute('id','buttonMultiply');
-    document.body.appendChild(buttonMultiply);
-
-    let buttonDivide = document.createElement('INPUT');
-    buttonDivide.setAttribute('TYPE', 'button');
-    buttonDivide.setAttribute('value', ':');
-    buttonDivide.setAttribute('id','buttonDivide');
-    document.body.appendChild(buttonDivide);
-
-    let resultDiv = document.createElement('div');
-    resultDiv.setAttribute('id','result');
-    document.body.appendChild(resultDiv);
-}
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = resultToPage;
-function resultToPage(data) {
-    let resultDiv = document.getElementById('result');
-    resultDiv.innerText = data;
-}
+control.init();
+//profileView.init();
 
 /***/ })
 /******/ ]);
