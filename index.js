@@ -172,7 +172,7 @@ var scoresView = {
     },
     render: function(){
         for (var i = 0; i < control.getAllScores().length/*model.allPersons.length*/; i++) {
-            $(".scores").append(`<li id="id-${i}"><span>${control.getAllScores()[i]}</span><input class="score-input" type="text" hidden></li>`);
+            $(".scores").append(`<li id="id-${i}"><span>${control.getAllScores()[i]}</span><input class="score-input" type="text" hidden/></li>`);
         }
     },
     handleClicks: function(event) {
