@@ -182,7 +182,6 @@ var control = {
     },
     setCurrentPersonScore: function(value){
         model.currentPerson.score = value;
-        console.log('i set new score');
     },
     moveUserUp: function (index) {
         if (index>=1 && index<=model.allPersons.length){
@@ -198,12 +197,10 @@ var control = {
         }
     },
     moveUserDown: function (index) {
-        console.log(model.allPersons,'pre');
         if (index>=0 && index<=(model.allPersons.length-2)){
             let temp = model.allPersons[+index+1];
             model.allPersons[+index+1] = model.allPersons[+index];
             model.allPersons[+index] = temp;
-            console.log(model.allPersons, "after");
             $(".names").empty();
             $(".scores").empty();
             $(".profile").empty();
@@ -211,7 +208,6 @@ var control = {
             listView.render();
             scoresView.render();
         }
-        console.log(model.allPersons);
     }
 };
 
@@ -225,15 +221,11 @@ var listView = {
             $(".names").append(`<li id=${i}>${control.getAllNames()[i]}</li>`);
         }
         $(".wrapper").after(`<div id="brief-info">Selected person is <span></span> Person's score is: <span></span></div>`);
-
     },
     handleClicks: function(event){
-        console.log(event.target.id);
         control.setCurrentPerson(event.target.id);
     }
 };
-
-
 var scoresView = {
     init: function(){
         this.render();
@@ -241,27 +233,24 @@ var scoresView = {
     },
     render: function(){
         for (var i = 0; i < control.getAllScores().length/*model.allPersons.length*/; i++) {
-            $(".scores").append(`<li id="id-${i}"><span>${control.getAllScores()[i]}</span><input class="score-input" type="text" hidden/></li>`);
+            $(".scores").append(`<li id="id-${i}"><span>${control.getAllScores()[i]}</span><input class="score-input" type="number" hidden/></li>`);
         }
     },
     handleClicks: function(event) {
-        console.log(event.target.id);
         let liId = event.target.id.split('').splice(3).join('');
-        let parentId = event.target.parentNode.id.split('').splice(3).join('');
-        console.log(liId);
         if(typeof liId ==='string'){
             $(`#id-${liId}`).children().toggle().focus();
             $(`#id-${liId}`).focusout(function () {
-                console.log('focusout',$(`#id-${liId}`).children(".score-input").val());
-                $(`#id-${liId}`).children().text($(`#id-${liId}`).children(".score-input").val());
-                control.setCurrentPersonScore($(`#id-${liId}`).children(".score-input").val());
+                if($(`#id-${liId}`).children(".score-input").val() != '') {
+                    $(`#id-${liId}`).children().text($(`#id-${liId}`).children(".score-input").val());
+                    control.setCurrentPersonScore($(`#id-${liId}`).children(".score-input").val());
+                }
             });
+
             control.setCurrentPerson(liId);
         }
     }
 };
-
-
 var profileView = {
     init: function(){
         this.render();
@@ -270,7 +259,6 @@ var profileView = {
         $('.profile').html(`<img src=${control.getCurrentPerson().photoUrl}><h3>${control.getCurrentPerson().name}</h3><p>${control.getCurrentPerson().score}</p>`)
     }
 };
-
 var sortView = {
     init: function(){
         this.render();
@@ -283,22 +271,17 @@ var sortView = {
         }
     },
     handleClicks: function(event){
-        console.log($(event.target).attr("class"));
         if($(event.target).attr("class")==='up'){
             let liId = event.target.id.split('').splice(3).join('');
             control.moveUserUp(liId);
-            console.log(liId);
-            console.log(event.target.parentNode);
         } else if($(event.target).attr("class")==='down'){
             let liId = event.target.id.split('').splice(3).join('');
             control.moveUserDown(liId);
-            console.log(liId);
         }
     }
-}
-
+};
 control.init();
-//profileView.init();
+
 
 /***/ })
 /******/ ]);

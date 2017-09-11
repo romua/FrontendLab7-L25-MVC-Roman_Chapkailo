@@ -164,7 +164,7 @@ var scoresView = {
     },
     render: function(){
         for (var i = 0; i < control.getAllScores().length/*model.allPersons.length*/; i++) {
-            $(".scores").append(`<li id="id-${i}"><span>${control.getAllScores()[i]}</span><input class="score-input" type="text" hidden/></li>`);
+            $(".scores").append(`<li id="id-${i}"><span>${control.getAllScores()[i]}</span><input class="score-input" type="number" hidden/></li>`);
         }
     },
     handleClicks: function(event) {
@@ -172,9 +172,12 @@ var scoresView = {
         if(typeof liId ==='string'){
             $(`#id-${liId}`).children().toggle().focus();
             $(`#id-${liId}`).focusout(function () {
-                $(`#id-${liId}`).children().text($(`#id-${liId}`).children(".score-input").val());
-                control.setCurrentPersonScore($(`#id-${liId}`).children(".score-input").val());
+                if($(`#id-${liId}`).children(".score-input").val() != '') {
+                    $(`#id-${liId}`).children().text($(`#id-${liId}`).children(".score-input").val());
+                    control.setCurrentPersonScore($(`#id-${liId}`).children(".score-input").val());
+                }
             });
+
             control.setCurrentPerson(liId);
         }
     }
